@@ -447,7 +447,7 @@ const CheckoutPage: React.FC = () => {
                   <div className="flex items-center gap-3">
                     {item.image ? (
                       <Image
-                        src={item.image}
+                        src={item?.image|| "img"}
                         alt={item.name}
                         height={20}
                         width={20}
