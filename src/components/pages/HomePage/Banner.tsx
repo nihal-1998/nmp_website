@@ -25,13 +25,15 @@ const Banner = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      <Image
-        src={bannerData?.data?.heroImg}
-        alt="banner"
-        fill
-        className="w-full object-cover "
-        priority
-      />
+      {bannerData?.data?.heroImg ? (
+        <Image
+          src={bannerData?.data?.heroImg || ""}
+          alt="banner"
+          fill
+          className="w-full object-cover "
+          priority
+        />
+      ) : null}
 
       <div className="container mx-auto h-full relative">
         <div className="absolute top-1/2 left-0 -translate-y-1/2 max-w-2xl text-white drop-shadow-lg px-2 md:px-0">

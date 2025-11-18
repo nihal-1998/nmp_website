@@ -9,27 +9,35 @@ import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import Link from "next/link";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { useGetProductsQuery } from "@/redux/features/productsApi/productsApi";
+import {
+  useGetProductsQuery,
+  useGetSingleProductQuery,
+} from "@/redux/features/productsApi/productsApi";
 import {
   useGetCatDropDownQuery,
   useGetFilterDropdownByIdQuery,
 } from "@/redux/features/categoryApi/categoryApi";
 import { Pagination, ConfigProvider } from "antd";
 import { useParams } from "next/navigation";
+import { IoIosCart } from "react-icons/io";
+import { useGetAllReviewQuery } from "@/redux/features/reviewApi/reviewApi";
+import toast from "react-hot-toast";
 
 // ---------------- Filter Section ----------------
 const FilterSection: React.FC<{
   title: string;
-  options: { name: string; id: string }[];  // Include category ID with name
+  options: { name: string; id: string }[]; // Include category ID with name
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 }> = ({ title, options, selected, setSelected }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleChange = (item: { name: string; id: string }) => {
-    console.log("selected item:", item)
+    console.log("selected item:", item);
     setSelected((prev) =>
-      prev.includes(item.id) ? prev.filter((c) => c !== item.id) : [...prev, item.id]
+      prev.includes(item.id)
+        ? prev.filter((c) => c !== item.id)
+        : [...prev, item.id]
     );
   };
 
@@ -79,22 +87,21 @@ const SelectedType = () => {
   const params = useParams();
   const id = params.id;
 
-console.log("seleceted categories,",selectedCategories.join(','))
-console.log("seleceted selectedFlavours,",selectedFlavours)
-console.log("seleceted selectedBrands,",selectedBrands)
-
+  console.log("seleceted categories,", selectedCategories.join(","));
+  console.log("seleceted selectedFlavours,", selectedFlavours);
+  console.log("seleceted selectedBrands,", selectedBrands);
 
   const { data: productsData, isLoading } = useGetProductsQuery({
     page: currentPage,
     limit: pageSize,
     searchTerm: searchText,
     typedId: id,
-    categoryId: selectedCategories.join(','), 
-    flavorId: selectedFlavours.join(','), 
-    brandId: selectedBrands.join(','), 
+    categoryId: selectedCategories.join(","),
+    flavorId: selectedFlavours.join(","),
+    brandId: selectedBrands.join(","),
   });
 
-  console.log("productsdata:",productsData?.data)
+  console.log("productsdata:", productsData?.data);
   const { data: categoryDropdata } = useGetCatDropDownQuery(undefined);
   const { data: filterData } = useGetFilterDropdownByIdQuery(id);
 
@@ -106,47 +113,79 @@ console.log("seleceted selectedBrands,",selectedBrands)
   };
 
   // Dynamically fetch categories, brands, and flavours from the dropdown
-  const categories = filterData?.data?.categoryDropDown?.map((c: any) => ({
-    name: c.name,
-    id: c._id,
-  })) ?? [];
+  const categories =
+    filterData?.data?.categoryDropDown?.map((c: any) => ({
+      name: c.name,
+      id: c._id,
+    })) ?? [];
 
-  const brands = filterData?.data?.brandDropDown?.map((b: any) => ({
-    name: b.name,
-    id: b._id,
-  })) ?? [];
+  const brands =
+    filterData?.data?.brandDropDown?.map((b: any) => ({
+      name: b.name,
+      id: b._id,
+    })) ?? [];
 
-  const flavours = filterData?.data?.flavorDropDown?.map((f: any) => ({
-    name: f.name,
-    id: f._id,
-  })) ?? [];
+  const flavours =
+    filterData?.data?.flavorDropDown?.map((f: any) => ({
+      name: f.name,
+      id: f._id,
+    })) ?? [];
 
-const filteredProducts = useMemo(() => {
-  return products.filter((product:any) => {
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(product.category);
+  const filteredProducts = useMemo(() => {
+    return products.filter((product: any) => {
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.category);
 
-    const matchesBrand =
-      selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+      const matchesBrand =
+        selectedBrands.length === 0 || selectedBrands.includes(product.brand);
 
-    const matchesFlavour =
-      selectedFlavours.length === 0 ||
-      selectedFlavours.includes(product.flavor);
+      const matchesFlavour =
+        selectedFlavours.length === 0 ||
+        selectedFlavours.includes(product.flavor);
 
-    const matchesSearch =
-      searchText === "" ||
-      product.name.toLowerCase().includes(searchText.toLowerCase());
+      const matchesSearch =
+        searchText === "" ||
+        product.name.toLowerCase().includes(searchText.toLowerCase());
 
-    return matchesCategory && matchesBrand && matchesFlavour && matchesSearch;
-  });
-}, [
-  products,
-  selectedCategories,
-  selectedBrands,
-  selectedFlavours,
-  searchText,
-]);
+      return matchesCategory && matchesBrand && matchesFlavour && matchesSearch;
+    });
+  }, [
+    products,
+    selectedCategories,
+    selectedBrands,
+    selectedFlavours,
+    searchText,
+  ]);
+
+
+const handleAddToCart = (product: any) => {
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  if (product.quantity !== 0) {
+    const existingItem = cart.find((item: any) => item._id === product._id);
+
+    if (existingItem) {
+      toast.error("Product already in cart");
+      return;
+    }
+
+    cart.push({
+      _id: product._id,
+      name: product.name,
+      image: product.image,
+      price: product.currentPrice,
+      quantity: 1,
+      totalQty: product.quantity,
+    });
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.dispatchEvent(new Event("cartUpdated"));
+    toast.success("Product added to cart");
+  } else {
+    toast.error("This product is out of Stock");
+  }
+};
 
 
   return (
@@ -221,7 +260,10 @@ const filteredProducts = useMemo(() => {
               ))
             ) : productsData?.data.length > 0 ? (
               productsData?.data?.map((product: any) => (
-                <div key={product._id} className="relative bg-white shadow-lg rounded-lg p-4 text-blue-500">
+                <div
+                  key={product._id}
+                  className="relative bg-white shadow-lg rounded-lg p-4 text-blue-500"
+                >
                   {product?.discount && product.discount !== "" && (
                     <span className="absolute top-5 left-10 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full z-10 shadow-md">
                       {product.discount}
@@ -240,26 +282,48 @@ const filteredProducts = useMemo(() => {
                     <h1 className="font-bold mt-4 text-blue-500 text-center text-xl my-2">
                       {product.name}
                     </h1>
+
+                    <div className="text-gray-600 text-sm text-center space-y-1 h-20">
+                      <p>Category: {product.category}</p>
+                      {product?.brand ? <p>Brand: {product.brand}</p> : ""}
+                      {product?.flavor ? <p>Flavour: {product.flavor}</p> : ""}
+                    </div>
                   </Link>
-                  <div className="text-gray-600 text-sm text-center space-y-1 h-20">
-                    <p>Category: {product.category}</p>
-                    {product?.brand ? <p>Brand: {product.brand}</p> : ""}
-                    {product?.flavor ? <p>Flavour: {product.flavor}</p> : ""}
-                  </div>
-                  <div className=" flex justify-between items-baseline p-2 mt-5">
+                  <div className=" flex justify-between items-baseline p-2 ">
                     <div className=" flex gap-3 items-baseline">
-                      <p className="text-lg font-semibold">${product.currentPrice}</p>
+                      <p className="text-lg font-semibold">
+                        ${product.currentPrice}
+                      </p>
                       {product.originalPrice > 0 && (
-                        <p className="text-gray-500 line-through text-sm">${product.originalPrice}</p>
+                        <p className="text-gray-500 line-through text-sm">
+                          ${product.originalPrice}
+                        </p>
                       )}
+                    </div>
+                    <div className="">
+                      <button
+                      onClick={() => handleAddToCart(product)}
+                        className="flex justify-center items-center gap-2 bg-blue-100 px-2 py-2 text-blue-600 hover:bg-blue-200 rounded"
+                      >
+                        <IoIosCart />
+                      </button>
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                       {Array(5)
                         .fill(null)
                         .map((_, i) => (
-                          <FaStar key={i} className={`${i < product.ratings ? "text-orange-400" : "text-gray-300"}`} />
+                          <FaStar
+                            key={i}
+                            className={`${
+                              i < product.ratings
+                                ? "text-orange-400"
+                                : "text-gray-300"
+                            }`}
+                          />
                         ))}
-                      <span className="text-gray-500 text-sm ml-1">({product.totalReview} reviews)</span>
+                      <span className="text-gray-500 text-sm ml-1">
+                        ({product.totalReview} reviews)
+                      </span>
                     </div>
                   </div>
                 </div>
