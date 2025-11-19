@@ -9,6 +9,7 @@ const LimitedOffer: React.FC = () => {
   const { data: infoData } = useGetBannerQuery(undefined);
 
   const rawDate = infoData?.data?.countDownDate;
+  console.log("info", infoData);
   const targetDate = rawDate
     ? new Date(rawDate.replace("Z", "")).getTime()
     : null;
@@ -52,7 +53,7 @@ const LimitedOffer: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetDate]);
 
   return (
@@ -85,14 +86,15 @@ const LimitedOffer: React.FC = () => {
         </div>
 
         <div className="w-full md:w-[325px] h-[300px] md:h-[450px] relative">
-          <Image
-            src={infoData?.data?.countDownImg}
-            alt="Product"
-   
-            fill
-            className="object-contain"
-            priority
-          />
+          {infoData?.data?.countDownImg ? (
+            <Image
+              src={infoData?.data?.countDownImg || ""}
+              alt="Product"
+              fill
+              className="object-contain"
+              priority
+            />
+          ) : null}
         </div>
       </div>
     </div>

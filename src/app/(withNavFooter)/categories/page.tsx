@@ -77,7 +77,7 @@ const CategoryPage = () => {
                 {/* Image */}
                 <div className="flex justify-center my-3">
                   <Image
-                    src={product.image}
+                    src={product?.image||"img"}
                     height={200}
                     width={200}
                     alt={product.name}
