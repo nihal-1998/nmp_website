@@ -65,12 +65,12 @@ jobs:
           ssh $EC2_USER@$EC2_HOST "echo \"$ENV_FILE\" > ~/nmp_website/.env"
           
           # install production dependencies on EC2
-          ssh $EC2_USER@$EC2_HOST "cd ~/nmp_website && export PATH=$PATH:/run/user/1000/fnm_multishells/6355_1763557609180/bin && npm install --frozen-lockfile"
+          ssh $EC2_USER@$EC2_HOST "cd ~/nmp_website && export PATH=$PATH:/run/user/1000/fnm_multishells/1719_1763612589726/bin && npm install --frozen-lockfile"
           
           # Stop existing PM2 process if it exists
-          ssh $EC2_USER@$EC2_HOST "cd ~/nmp_website && export PATH=$PATH:/run/user/1000/fnm_multishells/6355_1763557609180/bin && pm2 delete nmp_website || true"
+          ssh $EC2_USER@$EC2_HOST "cd ~/nmp_website && export PATH=$PATH:/run/user/1000/fnm_multishells/1719_1763612589726/bin && pm2 delete nmp_website || true"
 
           # Start the application with PM2
-          ssh $EC2_USER@$EC2_HOST "cd ~/nmp_website && export PATH=$PATH:/run/user/1000/fnm_multishells/6355_1763557609180/bin && pm2 start npm --name nmp_website -- run start"
+          ssh $EC2_USER@$EC2_HOST "cd ~/nmp_website && export PATH=$PATH:/run/user/1000/fnm_multishells/1719_1763612589726/bin && pm2 start npm --name nmp_website -- run start"
   
   
