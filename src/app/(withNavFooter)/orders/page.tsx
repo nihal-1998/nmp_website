@@ -134,7 +134,7 @@ const OrderPage = () => {
       render: (products: Product[], record: Order) => (
         <div className="flex flex-col gap-2">
           {products.map((product, idx) => (
-            <div key={idx} className="flex items-center gap-3">
+            <div key={idx}   className="flex flex-col sm:flex-row sm:items-center gap-3 border p-2 rounded-md">
               <Image
                 src={product.image}
                 alt={product.name}
@@ -194,15 +194,16 @@ const OrderPage = () => {
   return (
     <div className="container mx-auto mb-20 px-4 min-h-screen">
       <SectionTitle heading="All Orders" />
-
-      <Table
-        columns={columns}
-        dataSource={orderData?.data}
-        rowKey="_id"
-        loading={isLoading}
-        pagination={false}
-        bordered
-      />
+      <div className="w-full overflow-x-auto">
+        <Table
+          columns={columns}
+          dataSource={orderData?.data}
+          rowKey="_id"
+          loading={isLoading}
+          pagination={false}
+          bordered
+        />
+      </div>
       <ConfigProvider
         theme={{
           components: {
@@ -246,15 +247,12 @@ const OrderPage = () => {
           <div className="">
             <span className="mr-2">Rating:</span>
 
-            
             <Form.Item
               name="star"
               rules={[{ required: true, message: "Please select a rating!" }]}
             >
               <Rate value={rating} onChange={setRating} />
             </Form.Item>
-
-
           </div>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={isReviewLoading}>
