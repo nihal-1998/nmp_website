@@ -173,8 +173,8 @@ const CartPage = () => {
 
       {cartItems.length > 0 ? (
         <div className="flex justify-between items-center mt-5">
-          <Link href="/products">
-            <button className="text-[#3f67bc] font-bold">
+          <Link href="/product-type">
+            <button className="text-[#3f67bc] font-bold cursor-pointer">
               ← Continue shopping
             </button>
           </Link>

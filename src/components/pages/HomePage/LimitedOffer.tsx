@@ -9,7 +9,7 @@ const LimitedOffer: React.FC = () => {
   const { data: infoData } = useGetBannerQuery(undefined);
 
   const rawDate = infoData?.data?.countDownDate;
-  console.log("info", infoData);
+  // console.log("info", infoData);
   const targetDate = rawDate
     ? new Date(rawDate.replace("Z", "")).getTime()
     : null;

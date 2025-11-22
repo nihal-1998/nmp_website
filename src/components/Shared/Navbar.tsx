@@ -10,7 +10,7 @@ import { FaRegUser } from "react-icons/fa";
 import { useGetProfileQuery } from "@/redux/features/profileApi/profileApi";
 import Image from "next/image";
 import { Tooltip } from "antd";
-import { useGetCartQuery } from "@/redux/features/cartApi/cartApi";
+// import { useGetCartQuery } from "@/redux/features/cartApi/cartApi";
 import { LuLogOut } from "react-icons/lu";
 import user from "../../assets/image/user.jpeg";
 import { logout } from "@/redux/features/auth/authSlice";
@@ -25,13 +25,14 @@ const NavBar = () => {
   const [cartCount, setCartCount] = useState(0);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const { data: profileData, refetch } = useGetProfileQuery(undefined);
   const token = localStorage.getItem("token");
+  const { data: profileData, refetch } = useGetProfileQuery(undefined, {
+    skip: !token,
+  });
   useEffect(() => {
     if (token) refetch();
   }, [token, refetch]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: cartData } = useGetCartQuery(undefined);
+  // const { data: cartData } = useGetCartQuery(undefined);
   // const cartItems = cartData?.data || [];
   const updateCartCount = () => {
     const cartString = localStorage.getItem("cart");
@@ -198,7 +199,6 @@ const NavBar = () => {
               ))}
 
               <div className="flex justify-between items-center gap-3">
-           
                 <Link href="/cart" className="relative flex items-center">
                   <IoCartOutline className="text-3xl  transition" />
                   {cartCount > 0 && (

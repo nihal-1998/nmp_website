@@ -1,5 +1,5 @@
-"use client";
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client"
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
@@ -12,29 +12,36 @@ const AgeVerification: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
+  // console.log("infoData", infoData?.data?.age)
   const age = infoData?.data?.age;
   const token = useSelector(userCurrentToken);
 
   useEffect(() => {
+    // Check localStorage on every render
+      if (age === undefined) return;
     const storedVerification = localStorage.getItem("ageVerified");
 
+    // If age is not set or is zero, skip the popup and allow access
     if (!age || age === 0) {
       setIsVerified(true);
       setShowPopup(false);
       return;
     }
 
-    if (!token || storedVerification !== "true") {
+    // If not verified and localStorage doesn't have the verification, show the popup
+    if (storedVerification !== "true") {
       setShowPopup(true);
     } else {
       setIsVerified(true);
+      setShowPopup(false);
     }
-  }, [token, age]);
+  }, [age]);  // Check whenever 'age' changes
 
   const handleVerify = () => {
+    // Store verification state in localStorage
     localStorage.setItem("ageVerified", "true");
-    setIsVerified(true);
-    setShowPopup(false);
+    setIsVerified(true); // User is verified
+    setShowPopup(false); // Close the popup
   };
 
   const handleReject = () => {

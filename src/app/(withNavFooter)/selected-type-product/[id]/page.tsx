@@ -33,7 +33,7 @@ const FilterSection: React.FC<{
   const [isOpen, setIsOpen] = useState(true);
 
   const handleChange = (item: { name: string; id: string }) => {
-    console.log("selected item:", item);
+    // console.log("selected item:", item);
     setSelected((prev) =>
       prev.includes(item.id)
         ? prev.filter((c) => c !== item.id)
@@ -87,9 +87,9 @@ const SelectedType = () => {
   const params = useParams();
   const id = params.id;
 
-  console.log("seleceted categories,", selectedCategories.join(","));
-  console.log("seleceted selectedFlavours,", selectedFlavours);
-  console.log("seleceted selectedBrands,", selectedBrands);
+  // console.log("seleceted categories,", selectedCategories.join(","));
+  // console.log("seleceted selectedFlavours,", selectedFlavours);
+  // console.log("seleceted selectedBrands,", selectedBrands);
 
   const { data: productsData, isLoading } = useGetProductsQuery({
     page: currentPage,
@@ -101,7 +101,7 @@ const SelectedType = () => {
     brandId: selectedBrands.join(","),
   });
 
-  console.log("productsdata:", productsData?.data);
+  // console.log("productsdata:", productsData?.data);
   const { data: categoryDropdata } = useGetCatDropDownQuery(undefined);
   const { data: filterData } = useGetFilterDropdownByIdQuery(id);
 

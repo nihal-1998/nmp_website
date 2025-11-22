@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -143,15 +144,15 @@ const CheckoutPage: React.FC = () => {
     lat: null,
     lon: null,
   });
-  console.log("coordinates", coordinates);
+  // console.log("coordinates", coordinates);
   const [geoLoading, setGeoLoading] = useState(false);
   const { data: ownerLocation } = useGetLocationApiQuery({});
   const { data: customerLocation } = useGetNearbyLocationQuery({
     long: coordinates?.lon,
     lat: coordinates?.lat,
   });
-  console.log("ownerLocation?.data",ownerLocation?.data);
-  console.log("customerLocation,", customerLocation);
+  // console.log("ownerLocation?.data",ownerLocation?.data);
+  // console.log("customerLocation,", customerLocation);
 
   // Load cart and decode token once on mount
   useEffect(() => {
@@ -271,11 +272,11 @@ const CheckoutPage: React.FC = () => {
         Number(coordinates.lat),
         Number(coordinates.lon)
       );
-      console.log("Distance check:", {
-        owner: ownerLocation.data,
-        customer: coordinates,
-        dist,
-      });
+      // console.log("Distance check:", {
+      //   owner: ownerLocation.data,
+      //   customer: coordinates,
+      //   dist,
+      // });
       setDistance(dist);
       setIsWithinRange(dist <= 5);
     }
@@ -311,7 +312,7 @@ const CheckoutPage: React.FC = () => {
       // Fetch coordinates before sending payload
       const cleanStreet = values.streetAddress.trim().replace(/,+$/, "");
       const coordinates = await getCoordinates(cleanStreet);
-      console.log("Coordinates:", coordinates);
+      // console.log("Coordinates:", coordinates);
 
       const payload = {
         userData,
@@ -326,7 +327,7 @@ const CheckoutPage: React.FC = () => {
         cartProducts,
       };
 
-      console.log("payload", payload);
+      // console.log("payload", payload);
 
       // return 0;
 
