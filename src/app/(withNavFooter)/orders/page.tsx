@@ -50,6 +50,7 @@ const OrderPage = () => {
     page: currentPage,
     limit: pageSize,
   });
+const [form] = Form.useForm();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
@@ -76,6 +77,7 @@ const OrderPage = () => {
     setOrderId("");
     setReview("");
     setRating(0);
+      form.resetFields();
   };
 
   const handleReviewSubmit = async (values: any) => {
@@ -230,7 +232,7 @@ const OrderPage = () => {
         onCancel={handleModalClose}
         footer={null}
       >
-        <Form onFinish={handleReviewSubmit}>
+        <Form form={form} onFinish={handleReviewSubmit}>
           <div className="mb-4">
             <Form.Item
               name="comment"
