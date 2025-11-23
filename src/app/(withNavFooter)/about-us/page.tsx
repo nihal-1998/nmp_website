@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
-import { FaLeaf, FaCloud, FaRegSmile } from "react-icons/fa";
-import image from "../../../assets/image/image 19.png";
-import Facts from "@/components/pages/AboutUs/Facts";
+// import { FaLeaf, FaCloud, FaRegSmile } from "react-icons/fa";
+// import image from "../../../assets/image/image 19.png";
+// import Facts from "@/components/pages/AboutUs/Facts";
 import { useAboutUsQuery } from "@/redux/features/subscribeApi/subscribeApi";
 
 const AboutUs = () => {
@@ -104,9 +104,9 @@ const AboutUs = () => {
       </div>
 
       {/* Facts Section */}
-      <div className="mt-16">
+      {/* <div className="mt-16">
         <Facts />
-      </div>
+      </div> */}
     </div>
   );
 };
