@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Image from "next/image";
@@ -23,12 +24,12 @@ const AboutUs = () => {
 
   return (
     <div className="container mx-auto my-20 ">
-      <div className="grid md:grid-cols-2 gap-28 justify-between p-2 md:p-0">
+      <div className="grid md:grid-cols-1 gap-28 justify-between p-2 md:p-0">
         {/* Left: Text */}
         <div>
           <h1 className="text-4xl font-bold mb-6 text-gray-900">About Us</h1>
 
-          <div className="space-y-4 text-gray-700 leading-relaxed">
+          {/* <div className="space-y-4 text-gray-700 leading-relaxed">
             {paragraphs.map(
               (para: string, idx: React.Key | null | undefined) => {
                 // ✅ Bold the first phrase before the first question mark/colon
@@ -51,13 +52,19 @@ const AboutUs = () => {
                 );
               }
             )}
-          </div>
+          </div> */}
+           <div
+            className="text-gray-700 leading-relaxed "
+            dangerouslySetInnerHTML={{
+              __html: aboutUsData?.data?.content || "No information found.",
+            }}
+          />
 
           {/* Features Section */}
         </div>
 
         {/* Right: Image */}
-        <div className="">
+        {/* <div className="">
           <Image
             src={image}
             alt="About "
@@ -93,7 +100,7 @@ const AboutUs = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Facts Section */}
