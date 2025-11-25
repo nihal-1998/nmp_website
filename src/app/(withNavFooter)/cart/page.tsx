@@ -90,7 +90,7 @@ const CartPage = () => {
 
   const handleCheckout = () => {
     router.push(`/checkout?total=${totalPrice}&quantity=${totalQuantity}`);
-   
+
   };
 
   return (
@@ -172,19 +172,38 @@ const CartPage = () => {
       ))}
 
       {cartItems.length > 0 ? (
-        <div className="flex justify-between items-center mt-5">
-          <Link href="/product-type">
-            <button className="text-[#3f67bc] font-bold cursor-pointer">
-              ← Continue shopping
-            </button>
-          </Link>
-          <div className="text-white">
-            <button
-              onClick={handleCheckout}
-              className="bg-[#3f67bc] px-6 py-2 rounded-lg "
-            >
-              Checkout
-            </button>
+        <div className="flex flex-col items-end mt-5">
+          <div className="w-full md:w-1/3 border p-4 rounded-md mb-4 bg-gray-50">
+            <div className="flex justify-between mb-2">
+              <span className="text-gray-600">Subtotal:</span>
+              <span className="font-semibold">${totalPrice.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-2">
+              <span className="text-gray-600">NY Sales Tax (8.8875%):</span>
+              <span className="font-semibold">${(totalPrice * 0.088875).toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between border-t pt-2 mt-2">
+              <span className="text-lg font-bold">Total:</span>
+              <span className="text-lg font-bold text-[#3f67bc]">
+                ${(totalPrice + totalPrice * 0.088875).toFixed(2)}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center w-full">
+            <Link href="/product-type">
+              <button className="text-[#3f67bc] font-bold cursor-pointer">
+                ← Continue shopping
+              </button>
+            </Link>
+            <div className="text-white">
+              <button
+                onClick={handleCheckout}
+                className="bg-[#3f67bc] px-6 py-2 rounded-lg "
+              >
+                Checkout
+              </button>
+            </div>
           </div>
         </div>
       ) : (

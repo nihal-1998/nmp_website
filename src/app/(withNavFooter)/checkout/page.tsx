@@ -114,8 +114,7 @@ const extractUserFromToken = (
     (claims["fullName"] as string) ||
     (claims["name"] as string) ||
     (claims["given_name"] && claims["family_name"]
-      ? `${claims["given_name"] as string} ${
-          claims["family_name"] as string
+      ? `${claims["given_name"] as string} ${claims["family_name"] as string
         }`.trim()
       : undefined);
 
@@ -247,9 +246,9 @@ const CheckoutPage: React.FC = () => {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distanceInKm = R * c;
     return distanceInKm * 0.621371; // return distance in miles
@@ -294,15 +293,15 @@ const CheckoutPage: React.FC = () => {
 
       const userData = tokenUser
         ? {
-            fullName: (tokenUser.fullName || "").trim(),
-            email: (tokenUser.email || "").trim(),
-            phone: (values.phone || "").trim(),
-          }
+          fullName: (tokenUser.fullName || "").trim(),
+          email: (tokenUser.email || "").trim(),
+          phone: (values.phone || "").trim(),
+        }
         : {
-            fullName: (values.fullName || "").trim(),
-            email: (values.email || "").trim(),
-            phone: values.phone,
-          };
+          fullName: (values.fullName || "").trim(),
+          email: (values.email || "").trim(),
+          phone: values.phone,
+        };
 
       if (!userData.fullName || !userData.email) {
         toast.error("Please provide your full name and email.");
@@ -359,15 +358,15 @@ const CheckoutPage: React.FC = () => {
 
       const userData = tokenUser
         ? {
-            fullName: (tokenUser.fullName || "").trim(),
-            email: (tokenUser.email || "").trim(),
-            phone: (values.phone || "").trim(),
-          }
+          fullName: (tokenUser.fullName || "").trim(),
+          email: (tokenUser.email || "").trim(),
+          phone: (values.phone || "").trim(),
+        }
         : {
-            fullName: (values.fullName || "").trim(),
-            email: (values.email || "").trim(),
-            phone: values.phone,
-          };
+          fullName: (values.fullName || "").trim(),
+          email: (values.email || "").trim(),
+          phone: values.phone,
+        };
 
       if (!userData.fullName || !userData.email) {
         toast.error("Please provide your full name and email.");
@@ -448,7 +447,7 @@ const CheckoutPage: React.FC = () => {
                   <div className="flex items-center gap-3">
                     {item.image ? (
                       <Image
-                        src={item?.image|| "img"}
+                        src={item?.image || "img"}
                         alt={item.name}
                         height={20}
                         width={20}
@@ -484,10 +483,14 @@ const CheckoutPage: React.FC = () => {
               <h1>SHIPPING</h1>
               <p>${shippingCost.toFixed(2)}</p>
             </div>
+            <div className="text-neutral-400 flex justify-between">
+              <h1>NY Sales Tax (8.8875%)</h1>
+              <p className="font-semibold text-neutral-600">${(subTotal * 0.088875).toFixed(2)}</p>
+            </div>
           </div>
           <div className="text-neutral-600 flex justify-between mt-5 font-semibold">
             <h1>TOTAL</h1>
-            <p>${total.toFixed(2)}</p>
+            <p>${(total + subTotal * 0.088875).toFixed(2)}</p>
           </div>
         </div>
 
@@ -634,9 +637,8 @@ const CheckoutPage: React.FC = () => {
 
                 {distance !== null && (
                   <p
-                    className={`text-sm ${
-                      isWithinRange ? "text-green-600" : "text-red-500"
-                    }`}
+                    className={`text-sm ${isWithinRange ? "text-green-600" : "text-red-500"
+                      }`}
                   >
                     🚗 Distance from shop: {distance.toFixed(2)} miles
                   </p>
@@ -644,14 +646,13 @@ const CheckoutPage: React.FC = () => {
 
                 {distance !== null && (
                   <p
-                    className={`text-xs font-medium ${
-                      isWithinRange ? "text-green-600" : "text-red-500"
-                    }`}
+                    className={`text-xs font-medium ${isWithinRange ? "text-green-600" : "text-red-500"
+                      }`}
                   >
                     {isWithinRange
                       ? `✅ You are within the ${distance.toFixed(
-                          2
-                        )} mile range.`
+                        2
+                      )} mile range.`
                       : `❌ Please order within the ${ownerLocation?.data?.distance} mile range.`}
                   </p>
                 )}
