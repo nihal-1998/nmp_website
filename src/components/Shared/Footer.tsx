@@ -8,7 +8,7 @@ import {
   useTermsAndConditionQuery,
 } from "@/redux/features/subscribeApi/subscribeApi";
 import React, { useState } from "react";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { FaInstagram, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { FiMail, FiPhone } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { Modal, Spin } from "antd";
@@ -230,10 +230,13 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="font-semibold mb-4">FOLLOW US</h3>
             <div className="flex justify-center md:justify-start gap-4 text-xl">
-              <Link href="https://www.facebook.com/">
-                <FaFacebookF className="cursor-pointer hover:text-blue-600" />
+              <Link href="http://www.linkedin.com/company/qwikr-us" target="_blank" rel="noopener noreferrer">
+                <FaLinkedin className="cursor-pointer hover:text-blue-600" />
               </Link>
-              <Link href="https://www.instagram.com">
+              <Link href="https://x.com/Qwikr_us" target="_blank" rel="noopener noreferrer">
+                <FaXTwitter className="cursor-pointer hover:text-black" />
+              </Link>
+              <Link href="https://www.instagram.com/qwikr.us" target="_blank" rel="noopener noreferrer">
                 <FaInstagram className="cursor-pointer hover:text-pink-500" />
               </Link>
             </div>
