@@ -337,7 +337,7 @@ const Footer: React.FC = () => {
                   <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
                     <FiPhone className="text-gray-400 group-hover:text-purple-400" />
                   </div>
-                  <span>+1 917-530-1674</span>
+                  <span>+1(917)-530-1674</span>
                 </li>
               </ul>
             </div>
