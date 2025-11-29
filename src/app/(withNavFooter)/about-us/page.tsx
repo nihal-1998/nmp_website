@@ -1,112 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-// import Image from "next/image";
 import React from "react";
-// import { FaLeaf, FaCloud, FaRegSmile } from "react-icons/fa";
-// import image from "../../../assets/image/image 19.png";
-// import Facts from "@/components/pages/AboutUs/Facts";
 import { useAboutUsQuery } from "@/redux/features/subscribeApi/subscribeApi";
 
 const AboutUs = () => {
   const { data: aboutUsData } = useAboutUsQuery(undefined);
   const rawHtml = aboutUsData?.data?.content || "";
 
-  // ✅ Remove tags but keep structure
-  const cleanText = rawHtml.replace(/<[^>]*>/g, "");
-
-  // ✅ Split into sentences/paragraphs
-  const paragraphs = cleanText
-    .split(
-      /(?=\b[A-Z][a-z]+\s(?:Overview|Collection|Methods|Purposes|Sharing|Cookies|Tracking|Rights|Retention|Measures|Privacy|Contact))/
-    )
-    .filter((p: string) => p.trim() !== "");
-
   return (
-    <div className="container mx-auto my-20 ">
-      <div className="grid md:grid-cols-1 gap-28 justify-between p-2 md:p-0">
-        {/* Left: Text */}
-        <div>
-          <h1 className="text-4xl font-bold mb-6 text-gray-900">About Us</h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 md:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 pb-6 border-b-2 border-purple-100">
+              About Us
+            </h1>
 
-          {/* <div className="space-y-4 text-gray-700 leading-relaxed">
-            {paragraphs.map(
-              (para: string, idx: React.Key | null | undefined) => {
-                // ✅ Bold the first phrase before the first question mark/colon
-                const match = para.match(/^([^?:(]+[:?])/);
-                let boldPart = "";
-                let rest = para;
-
-                if (match) {
-                  boldPart = match[0];
-                  rest = para.replace(match[0], "");
-                }
-
-                return (
-                  <p key={idx} className="text-base md:text-lg">
-                    {boldPart && (
-                      <strong className="font-semibold">{boldPart}</strong>
-                    )}
-                    {rest}
-                  </p>
-                );
-              }
-            )}
-          </div> */}
-           <div
-            className="text-gray-700 leading-relaxed "
-            dangerouslySetInnerHTML={{
-              __html: aboutUsData?.data?.content || "No information found.",
-            }}
-          />
-
-          {/* Features Section */}
-        </div>
-
-        {/* Right: Image */}
-        {/* <div className="">
-          <Image
-            src={image}
-            alt="About "
-            height={0}
-            width={0}
-            className="rounded-xl shadow-lg h-auto w-full items-end"
-          />
-          <div className="mt-10 space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="bg-red-100 p-3 rounded-full text-red-500 shadow-sm">
-                <FaLeaf size={20} />
-              </div>
-              <p className="text-gray-700">
-                Made with carefully selected, safe ingredients.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="bg-blue-100 p-3 rounded-full text-blue-500 shadow-sm">
-                <FaCloud size={20} />
-              </div>
-              <p className="text-gray-700">
-                Smooth, flavorful clouds every time.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="bg-green-100 p-3 rounded-full text-green-500 shadow-sm">
-                <FaRegSmile size={20} />
-              </div>
-              <p className="text-gray-700">
-                Designed for comfort, style, and satisfaction.
-              </p>
-            </div>
+            <div
+              className="text-gray-700 leading-relaxed prose prose-lg max-w-none
+                prose-headings:text-gray-900 prose-headings:font-bold
+                prose-p:text-gray-700 prose-p:mb-4
+                prose-strong:text-gray-900 prose-strong:font-semibold
+                prose-ul:text-gray-700 prose-ol:text-gray-700
+                prose-li:mb-2
+                prose-a:text-purple-600 prose-a:no-underline hover:prose-a:underline"
+              dangerouslySetInnerHTML={{
+                __html: aboutUsData?.data?.content || "No information found.",
+              }}
+            />
           </div>
-        </div> */}
+        </div>
       </div>
-
-      {/* Facts Section */}
-      {/* <div className="mt-16">
-        <Facts />
-      </div> */}
     </div>
   );
 };

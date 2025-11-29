@@ -87,21 +87,21 @@ const AgeVerification: React.FC = () => {
               continue.
             </p>
 
-            <div className="flex justify-center gap-8 text-white">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 text-white">
               <motion.button
-                whileHover={{ scale: 1.07 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleVerify}
-                className="px-10 py-4 rounded-2xl bg-gradient-to-r from-green-400 to-green-600 text-white font-semibold text-xl shadow-lg hover:shadow-green-500/50 transition-all"
+                className="px-8 py-4 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-gray-900 font-bold text-lg shadow-lg hover:shadow-yellow-500/50 transition-all"
               >
                 Yes, I am {age}+
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.07 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleReject}
-                className="px-10 py-4 rounded-2xl bg-gradient-to-r from-red-400 to-red-600 text-white font-semibold text-xl shadow-lg hover:shadow-red-500/50 transition-all"
+                className="px-8 py-4 rounded-xl bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white font-semibold text-lg shadow-lg hover:bg-white/30 transition-all"
               >
                 Exit
               </motion.button>

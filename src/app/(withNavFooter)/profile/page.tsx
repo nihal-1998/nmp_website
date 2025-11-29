@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Button, Input, Spin, message } from "antd";
+import { Input, Spin, ConfigProvider } from "antd";
 import {
   useGetProfileQuery,
   useUpdateProfileImageMutation,
@@ -11,6 +11,7 @@ import {
 } from "@/redux/features/profileApi/profileApi";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { FaUser } from "react-icons/fa";
 
 const ProfilePage: React.FC = () => {
   const { data: profileData, isLoading } = useGetProfileQuery();
@@ -45,8 +46,8 @@ const ProfilePage: React.FC = () => {
 
   if (isLoading || !profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <Spin tip="Loading profile..." size="large" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+        <Spin size="large" />
       </div>
     );
   }
@@ -57,7 +58,7 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     if (!data.phone) {
-      return message.error("Phone is required");
+      return toast.error("Phone is required");
     }
 
     setLoadingUpdate(true);
@@ -105,107 +106,176 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-100 flex justify-center py-12 px-4 md:h-[70vh]">
-      <div className="w-full max-w-3xl bg-white rounded-xl shadow-md p-8">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-          <div className="flex  items-center gap-4">
-            <div className="relative w-16 h-16">
-              <Image
-                src={previewImage || profile.profile_img}
-                alt="Profile Avatar"
-                fill
-                className="rounded-full object-cover border-2 border-gray-300"
-              />
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 md:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <ConfigProvider
+          theme={{
+            components: {
+              Input: {
+                borderRadius: 8,
+              },
+              Button: {
+                borderRadius: 8,
+              },
+            },
+          }}
+        >
+          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+            {/* Header Section */}
+            <div className="bg-gradient-to-r from-purple-50 to-violet-50 px-6 md:px-8 py-6 border-b border-purple-100">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0">
+                    {previewImage || profile.profile_img ? (
+                      <Image
+                        src={previewImage || profile.profile_img}
+                        alt="Profile Avatar"
+                        fill
+                        className="rounded-full object-cover border-4 border-white shadow-lg"
+                      />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center border-4 border-white shadow-lg">
+                        <FaUser className="text-white text-2xl md:text-3xl" />
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                      {profile.fullName}
+                    </h2>
+                    <p className="text-gray-600 text-sm md:text-base">
+                      {profile.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                  <Link href="/orders" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-6 py-2.5 bg-white border-2 border-purple-500 text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-all duration-300">
+                      Order History
+                    </button>
+                  </Link>
+                  <button
+                    onClick={handleSave}
+                    disabled={loadingUpdate}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-gray-900 font-bold rounded-lg hover:from-yellow-300 hover:via-yellow-400 hover:to-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loadingUpdate ? (
+                      <>
+                        <span className="animate-spin inline-block w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full"></span>
+                        Saving...
+                      </>
+                    ) : (
+                      "Save changes"
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-semibold">{profile.fullName}</h2>
-              <p className="text-gray-500">{profile.email}</p>
+
+            {/* Profile Image Upload Section */}
+            <div className="px-6 md:px-8 py-6 border-b border-gray-200">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                Profile Picture
+              </h3>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="profile-upload"
+                />
+                <label
+                  htmlFor="profile-upload"
+                  className="cursor-pointer px-6 py-2.5 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-violet-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Choose Image
+                </label>
+                <button
+                  onClick={handleProfileImageUpdate}
+                  disabled={loadingImage || !selectedImage}
+                  className="px-6 py-2.5 bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-gray-900 font-bold rounded-lg hover:from-yellow-300 hover:via-yellow-400 hover:to-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {loadingImage ? (
+                    <>
+                      <span className="animate-spin inline-block w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full"></span>
+                      Uploading...
+                    </>
+                  ) : (
+                    "Upload"
+                  )}
+                </button>
+                {selectedImage && (
+                  <span className="text-sm text-gray-600">
+                    Image selected. Click Upload to save.
+                  </span>
+                )}
+              </div>
             </div>
-            {/* <FaEdit className="text-gray-400 ml-2 cursor-pointer hover:text-gray-600" /> */}
-          </div>
-          <div className="flex gap-2">
-            <Link href="/orders">
-              <Button
-                type="default"
-                className="border border-blue-400 text-blue-600 hover:bg-blue-50"
-              >
-                Order History
-              </Button>
-            </Link>
-            <Button
-              type="primary"
-              onClick={handleSave}
-              disabled={loadingUpdate}
-            >
-              {loadingUpdate ? <Spin size="small" /> : "Save changes"}
-            </Button>
-          </div>
-        </div>
 
-        <div className="flex items-center gap-4 mb-6">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="hidden"
-            id="profile-upload"
-          />
-          <label
-            htmlFor="profile-upload"
-            className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Choose Image
-          </label>
-          <Button
-            type="primary"
-            onClick={handleProfileImageUpdate}
-            disabled={loadingImage || !selectedImage}
-          >
-            {loadingImage ? <Spin size="small" /> : "Upload"}
-          </Button>
-        </div>
+            {/* Form Fields Section */}
+            <div className="px-6 md:px-8 py-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-6">
+                Personal Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col">
+                  <label className="text-gray-900 font-semibold mb-2">
+                    Full Name
+                  </label>
+                  <Input
+                    name="fullName"
+                    value={data.fullName}
+                    onChange={handleChange}
+                    size="large"
+                    className="rounded-lg border-gray-300 hover:border-purple-400 focus:border-purple-500"
+                    placeholder="Enter your full name"
+                  />
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="text-gray-600 mb-1">Full Name</label>
-            <Input
-              name="fullName"
-              value={data.fullName}
-              onChange={handleChange}
-              className="rounded-md"
-            />
-          </div>
+                <div className="flex flex-col">
+                  <label className="text-gray-900 font-semibold mb-2">
+                    Phone
+                  </label>
+                  <Input
+                    name="phone"
+                    value={data.phone}
+                    onChange={handleChange}
+                    size="large"
+                    className="rounded-lg border-gray-300 hover:border-purple-400 focus:border-purple-500"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
 
-          <div className="flex flex-col">
-            <label className="text-gray-600 mb-1">Phone</label>
-            <Input
-              name="phone"
-              value={data.phone}
-              onChange={handleChange}
-              className="rounded-md"
-            />
-          </div>
+                <div className="flex flex-col">
+                  <label className="text-gray-900 font-semibold mb-2">
+                    Email
+                  </label>
+                  <Input
+                    name="email"
+                    value={data.email}
+                    disabled
+                    size="large"
+                    className="rounded-lg bg-gray-50 border-gray-300"
+                  />
+                </div>
 
-          <div className="flex flex-col">
-            <label className="text-gray-600 mb-1">Email</label>
-            <Input
-              name="email"
-              value={data.email}
-              disabled
-              className="rounded-md bg-gray-100"
-            />
+                <div className="flex flex-col">
+                  <label className="text-gray-900 font-semibold mb-2">
+                    Password
+                  </label>
+                  <Input.Password
+                    name="password"
+                    value={data.password}
+                    disabled
+                    size="large"
+                    className="rounded-lg bg-gray-50 border-gray-300"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-
-          <div className="flex flex-col">
-            <label className="text-gray-600 mb-1">Password</label>
-            <Input.Password
-              name="password"
-              value={data.password}
-              disabled
-              className="rounded-md bg-gray-100"
-            />
-          </div>
-        </div>
+        </ConfigProvider>
       </div>
     </div>
   );

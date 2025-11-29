@@ -114,8 +114,7 @@ const extractUserFromToken = (
     (claims["fullName"] as string) ||
     (claims["name"] as string) ||
     (claims["given_name"] && claims["family_name"]
-      ? `${claims["given_name"] as string} ${
-          claims["family_name"] as string
+      ? `${claims["given_name"] as string} ${claims["family_name"] as string
         }`.trim()
       : undefined);
 
@@ -247,9 +246,9 @@ const CheckoutPage: React.FC = () => {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distanceInKm = R * c;
     return distanceInKm * 0.621371; // return distance in miles
@@ -294,15 +293,15 @@ const CheckoutPage: React.FC = () => {
 
       const userData = tokenUser
         ? {
-            fullName: (tokenUser.fullName || "").trim(),
-            email: (tokenUser.email || "").trim(),
-            phone: (values.phone || "").trim(),
-          }
+          fullName: (tokenUser.fullName || "").trim(),
+          email: (tokenUser.email || "").trim(),
+          phone: (values.phone || "").trim(),
+        }
         : {
-            fullName: (values.fullName || "").trim(),
-            email: (values.email || "").trim(),
-            phone: values.phone,
-          };
+          fullName: (values.fullName || "").trim(),
+          email: (values.email || "").trim(),
+          phone: values.phone,
+        };
 
       if (!userData.fullName || !userData.email) {
         toast.error("Please provide your full name and email.");
@@ -359,15 +358,15 @@ const CheckoutPage: React.FC = () => {
 
       const userData = tokenUser
         ? {
-            fullName: (tokenUser.fullName || "").trim(),
-            email: (tokenUser.email || "").trim(),
-            phone: (values.phone || "").trim(),
-          }
+          fullName: (tokenUser.fullName || "").trim(),
+          email: (tokenUser.email || "").trim(),
+          phone: (values.phone || "").trim(),
+        }
         : {
-            fullName: (values.fullName || "").trim(),
-            email: (values.email || "").trim(),
-            phone: values.phone,
-          };
+          fullName: (values.fullName || "").trim(),
+          email: (values.email || "").trim(),
+          phone: values.phone,
+        };
 
       if (!userData.fullName || !userData.email) {
         toast.error("Please provide your full name and email.");
@@ -431,103 +430,111 @@ const CheckoutPage: React.FC = () => {
   // }, [ownerLocation]);
 
   return (
-    <div className="container mx-auto my-12 px-2 md:px-0">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-28">
-        {/* ===== Left: Order Summary ===== */}
-        <div>
-          <h1 className="text-2xl font-bold text-neutral-600">Order Summary</h1>
-          <div className="mt-4 space-y-3">
-            {cart.length === 0 ? (
-              <p className="text-neutral-400">Your cart is empty.</p>
-            ) : (
-              cart.map((item) => (
-                <div
-                  key={item._id}
-                  className="flex items-center justify-between border border-neutral-200 rounded-md p-3"
-                >
-                  <div className="flex items-center gap-3">
-                    {item.image ? (
-                      <Image
-                        src={item?.image|| "img"}
-                        alt={item.name}
-                        height={20}
-                        width={20}
-                        className="w-12 h-12 object-cover rounded-md"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 bg-neutral-200 rounded-md" />
-                    )}
-                    <div>
-                      <p className="text-neutral-700 font-medium">
-                        {item.name}
-                      </p>
-                      <p className="text-neutral-400 text-sm">
-                        Qty: {item.quantity} • ${Number(item.price).toFixed(2)}{" "}
-                        each
-                      </p>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 md:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Checkout</h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* ===== Left: Order Summary ===== */}
+          <div className="order-2 lg:order-1">
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 sticky top-24">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b-2 border-purple-100">
+                Order Summary
+              </h2>
+              
+              <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                {cart.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">Your cart is empty.</p>
+                ) : (
+                  cart.map((item) => (
+                    <div
+                      key={item._id}
+                      className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors"
+                    >
+                      {item.image ? (
+                        <div className="relative w-16 h-16 flex-shrink-0">
+                          <Image
+                            src={item?.image || "img"}
+                            alt={item.name}
+                            fill
+                            className="object-cover rounded-lg"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-gray-900 font-semibold truncate">
+                          {item.name}
+                        </p>
+                        <p className="text-gray-600 text-sm">
+                          Qty: {item.quantity} × ${Number(item.price).toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="text-gray-900 font-bold">
+                        ${(Number(item.price) * Number(item.quantity)).toFixed(2)}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-neutral-700 font-semibold">
-                    ${(Number(item.price) * Number(item.quantity)).toFixed(2)}
+                  ))
+                )}
+              </div>
+
+              <div className="space-y-3 pt-6 border-t-2 border-purple-100">
+                <div className="flex justify-between text-gray-700">
+                  <span>Subtotal:</span>
+                  <span className="font-semibold">${subTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-700">
+                  <span>Shipping:</span>
+                  <span className="font-semibold">${shippingCost.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-700">
+                  <span>NY Sales Tax (8.8875%):</span>
+                  <span className="font-semibold">${(subTotal * 0.088875).toFixed(2)}</span>
+                </div>
+                <div className="pt-4 border-t-2 border-purple-100">
+                  <div className="flex justify-between">
+                    <span className="text-xl font-bold text-gray-900">Total:</span>
+                    <span className="text-2xl font-bold text-purple-600">
+                      ${(total + subTotal * 0.088875).toFixed(2)}
+                    </span>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-
-          <div className="border-b-2 border-b-neutral-300 pb-5 mt-6">
-            <div className="text-neutral-400 flex justify-between">
-              <h1>SUBTOTAL</h1>
-              <p>${subTotal.toFixed(2)}</p>
-            </div>
-            <div className="text-neutral-400 flex justify-between">
-              <h1>SHIPPING</h1>
-              <p>${shippingCost.toFixed(2)}</p>
+              </div>
             </div>
           </div>
-          <div className="text-neutral-600 flex justify-between mt-5 font-semibold">
-            <h1>TOTAL</h1>
-            <p>${total.toFixed(2)}</p>
-          </div>
-        </div>
 
-        {/* ===== Right: Checkout Form ===== */}
-        <ConfigProvider
-          theme={{
-            components: {
-              Form: { borderRadius: 0 },
-              Input: { borderRadius: 5 },
-            },
-          }}
-        >
-          <div className="py-10 mx-4 md:mx-0 px-6 md:px-10 border border-neutral-200 rounded-lg">
-            <div className="mb-4 text-center">
-              <h2 className="text-neutral-700 text-2xl font-bold mb-2 uppercase">
-                Checkout
-              </h2>
-              <p className="text-neutral-400 lg:text-lg font-bold">
-                Shipping Information
-              </p>
-            </div>
-
-            <Form<ContactFormValues>
-              form={form}
-              name="checkout"
-              onFinish={onFinish}
-              layout="vertical"
+          {/* ===== Right: Checkout Form ===== */}
+          <div className="order-1 lg:order-2">
+            <ConfigProvider
+              theme={{
+                components: {
+                  Form: { borderRadius: 8 },
+                  Input: { borderRadius: 8 },
+                },
+              }}
             >
+              <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <div className="mb-6">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                    Shipping Information
+                  </h2>
+                  <p className="text-gray-600">
+                    Please provide your delivery details
+                  </p>
+                </div>
+
+                <Form<ContactFormValues>
+                  form={form}
+                  name="checkout"
+                  onFinish={onFinish}
+                  layout="vertical"
+                >
               {mode === "guest" && !tokenUser && (
                 <>
                   <Form.Item
                     name="fullName"
-                    label="Full Name"
-                    labelCol={{
-                      style: {
-                        fontSize: "16px",
-                        fontWeight: 500,
-                        color: "#444",
-                      },
-                    }}
+                    label={<span className="text-gray-900 font-semibold">Full Name</span>}
                     rules={[
                       {
                         required: true,
@@ -535,25 +542,26 @@ const CheckoutPage: React.FC = () => {
                       },
                     ]}
                   >
-                    <Input placeholder="Your full name" />
+                    <Input 
+                      placeholder="Your full name" 
+                      size="large"
+                      className="rounded-lg"
+                    />
                   </Form.Item>
 
                   <Form.Item
                     name="email"
-                    label="Email"
-                    labelCol={{
-                      style: {
-                        fontSize: "16px",
-                        fontWeight: 500,
-                        color: "#444",
-                      },
-                    }}
+                    label={<span className="text-gray-900 font-semibold">Email</span>}
                     rules={[
                       { required: true, message: "Please enter your email" },
                       { type: "email", message: "Enter a valid email" },
                     ]}
                   >
-                    <Input placeholder="you@example.com" />
+                    <Input 
+                      placeholder="you@example.com" 
+                      size="large"
+                      className="rounded-lg"
+                    />
                   </Form.Item>
                 </>
               )}
@@ -569,25 +577,23 @@ const CheckoutPage: React.FC = () => {
 
               <Form.Item
                 name="phone"
-                label="Phone Number"
-                labelCol={{
-                  style: { fontSize: "16px", fontWeight: 500, color: "#444" },
-                }}
+                label={<span className="text-gray-900 font-semibold">Phone Number</span>}
                 rules={[
                   { required: true, message: "Please enter your phone number" },
                 ]}
               >
-                <Input placeholder="Phone Number" />
+                <Input 
+                  placeholder="Phone Number" 
+                  size="large"
+                  className="rounded-lg"
+                />
               </Form.Item>
 
               {/* UI portion where you show status under address field */}
 
               <Form.Item
                 name="streetAddress"
-                label="Street Address"
-                labelCol={{
-                  style: { fontSize: "16px", fontWeight: 500, color: "#444" },
-                }}
+                label={<span className="text-gray-900 font-semibold">Street Address</span>}
                 rules={[
                   {
                     required: true,
@@ -598,45 +604,41 @@ const CheckoutPage: React.FC = () => {
                 <Input
                   placeholder="e.g. 200 Central Park West"
                   onChange={handleAddressChange}
+                  size="large"
+                  className="rounded-lg"
                 />
               </Form.Item>
 
               {geoLoading && (
-                <p className="text-xs text-blue-500 mb-3">
-                  Fetching coordinates…
-                </p>
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-600">
+                    🔍 Fetching coordinates…
+                  </p>
+                </div>
               )}
 
               {!geoLoading &&
                 coordinates.lat === null &&
                 form.getFieldValue("streetAddress")?.trim() && (
-                  <p className="text-xs text-red-500 mb-3">
-                    Could not locate this address. Please check spelling or try
-                    again.
-                  </p>
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-600">
+                      ⚠️ Could not locate this address. Please check spelling or try again.
+                    </p>
+                  </div>
                 )}
 
-              <div className="my-2 space-y-1">
+              <div className="mb-6 p-4 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl space-y-2">
                 <p className="text-sm text-gray-700">
-                  🏬 <strong>Shop Address:</strong>{" "}
+                  <strong className="text-gray-900">🏬 Shop Address:</strong>{" "}
                   {ownerLocation?.data?.address
                     ? ownerLocation?.data?.address
                     : "Loading address..."}
                 </p>
 
-                {/* {ownerLocation?.data?.latitude &&
-                  ownerLocation?.data?.longitude && (
-                    <p className="text-xs text-gray-500">
-                      (Lat: {ownerLocation.data.latitude}, Lon:{" "}
-                      {ownerLocation.data.longitude})
-                    </p>
-                  )} */}
-
                 {distance !== null && (
                   <p
-                    className={`text-sm ${
-                      isWithinRange ? "text-green-600" : "text-red-500"
-                    }`}
+                    className={`text-sm font-semibold ${isWithinRange ? "text-green-600" : "text-red-600"
+                      }`}
                   >
                     🚗 Distance from shop: {distance.toFixed(2)} miles
                   </p>
@@ -644,14 +646,13 @@ const CheckoutPage: React.FC = () => {
 
                 {distance !== null && (
                   <p
-                    className={`text-xs font-medium ${
-                      isWithinRange ? "text-green-600" : "text-red-500"
-                    }`}
+                    className={`text-sm font-medium ${isWithinRange ? "text-green-600" : "text-red-600"
+                      }`}
                   >
                     {isWithinRange
                       ? `✅ You are within the ${distance.toFixed(
-                          2
-                        )} mile range.`
+                        2
+                      )} mile range.`
                       : `❌ Please order within the ${ownerLocation?.data?.distance} mile range.`}
                   </p>
                 )}
@@ -668,79 +669,78 @@ const CheckoutPage: React.FC = () => {
               </Form.Item> */}
 
               {/* City, State, ZIP fixed */}
-              <Form.Item name="city" label="City" initialValue="Manhattan">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item name="state" label="State" initialValue="NY">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item
-                name="zipCode"
-                label="Zip Code"
-                rules={[
-                  { required: true, message: "Please enter your ZIP code" },
-                  {
-                    pattern: /^\d{5}$/,
-                    message: "ZIP code must be exactly 5 digits",
-                  },
-                ]}
-              >
-                <Input placeholder="e.g. 10016" maxLength={5} />
-              </Form.Item>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Form.Item name="city" label={<span className="text-gray-900 font-semibold">City</span>} initialValue="Manhattan">
+                  <Input disabled size="large" className="rounded-lg bg-gray-100" />
+                </Form.Item>
+                <Form.Item name="state" label={<span className="text-gray-900 font-semibold">State</span>} initialValue="NY">
+                  <Input disabled size="large" className="rounded-lg bg-gray-100" />
+                </Form.Item>
+                <Form.Item
+                  name="zipCode"
+                  label={<span className="text-gray-900 font-semibold">Zip Code</span>}
+                  rules={[
+                    { required: true, message: "Please enter your ZIP code" },
+                    {
+                      pattern: /^\d{5}$/,
+                      message: "ZIP code must be exactly 5 digits",
+                    },
+                  ]}
+                >
+                  <Input placeholder="e.g. 10016" maxLength={5} size="large" className="rounded-lg" />
+                </Form.Item>
+              </div>
 
-              <Form.Item className="text-center">
-                <div className="text-white">
-                  <button
-                    type="submit"
-                    className="w-full py-3 font-bold text-2xl bg-[#3f67bc] text-white rounded-md shadow-lg disabled:opacity-70"
-                    disabled={loading || cart.length === 0 || !isWithinRange}
-                  >
-                    {loading ? (
-                      <ConfigProvider
-                        theme={{
-                          components: {
-                            Spin: {
-                              colorPrimary: "rgb(255,255,255)",
-                            },
+              <Form.Item className="mt-6">
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-gray-900 font-bold py-4 px-6 rounded-xl hover:from-yellow-300 hover:via-yellow-400 hover:to-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading || cart.length === 0 || !isWithinRange}
+                >
+                  {loading ? (
+                    <ConfigProvider
+                      theme={{
+                        components: {
+                          Spin: {
+                            colorPrimary: "#1f2937",
                           },
-                        }}
-                      >
-                        <Spin size="small" />
-                      </ConfigProvider>
-                    ) : (
-                      "Pay with Stripe"
-                    )}
-
-                    {/* {loading ? <Spin size="small" /> : "Pay with Stripe"} */}
-                  </button>
-                </div>
-              </Form.Item>
-            </Form>
-            <div className="text-white">
-              <button
-                onClick={() => handleCashOndelivary(form.getFieldsValue())}
-                className="w-full mt-2 text-xs py-3 font-bold bg-[#3f67bc] text-white rounded-md shadow-lg disabled:opacity-70"
-                disabled={cashLoading || cart.length === 0 || !isWithinRange}
-              >
-                {cashLoading ? (
-                  <ConfigProvider
-                    theme={{
-                      components: {
-                        Spin: {
-                          colorPrimary: "rgb(255,255,255)",
                         },
-                      },
-                    }}
-                  >
-                    <Spin size="small" />
-                  </ConfigProvider>
-                ) : (
-                  "Cash On Delivery"
-                )}
-              </button>
-            </div>
+                      }}
+                    >
+                      <Spin size="small" />
+                    </ConfigProvider>
+                  ) : (
+                    "Pay with Stripe"
+                  )}
+                </button>
+                </Form.Item>
+                </Form>
+                
+                <button
+                  onClick={() => handleCashOndelivary(form.getFieldsValue())}
+                  className="w-full mt-4 bg-white border-2 border-purple-500 text-purple-600 font-bold py-4 px-6 rounded-xl hover:bg-purple-50 transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={cashLoading || cart.length === 0 || !isWithinRange}
+                >
+                  {cashLoading ? (
+                    <ConfigProvider
+                      theme={{
+                        components: {
+                          Spin: {
+                            colorPrimary: "#9333ea",
+                          },
+                        },
+                      }}
+                    >
+                      <Spin size="small" />
+                    </ConfigProvider>
+                  ) : (
+                    "Cash On Delivery"
+                  )}
+                </button>
+              </div>
+            </ConfigProvider>
           </div>
-        </ConfigProvider>
+        </div>
       </div>
     </div>
   );
